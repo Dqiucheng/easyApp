@@ -2,7 +2,7 @@
 ===============
 #  1、下载地址
 ~~~
-https://github.com/Dqiucheng/"easyApp/
+https://github.com/Dqiucheng/easyApp/
 ~~~
 下载完成后放入src目录
 
