@@ -127,7 +127,7 @@ func newDlogRoller(module, Level string) *dlogroller.Roller {
 
 	hook, err := dlogroller.New(
 		path.Join(DLogRootPath, config.App.AppName, module),
-		path.Join("%Y%m", "%d", "%m-%dT%H"+Level+"a.test.log"),
+		path.Join("%Y%m", "%d", "%m-%dT%H"+Level+".log"),
 		dlogroller.SetMaxSize(config.App.DLogMaxSize),
 		dlogroller.SetMaxAge(config.App.DLogMaxAge),
 		dlogroller.SetMillEveryDayHour(config.App.DLogMillEveryDayHour),
