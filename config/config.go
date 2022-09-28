@@ -38,6 +38,7 @@ type callHostStruct struct {
 
 // databaseStruct 数据库相关配置
 type databaseStruct struct {
-	MySQL map[string]map[string]interface{}
-	Redis map[string]map[string]interface{}
+	MySQL         map[string]map[string]interface{}
+	Redis         map[string]map[string]interface{}
+	Elasticsearch map[string]map[string]interface{}
 }

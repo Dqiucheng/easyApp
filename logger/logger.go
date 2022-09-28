@@ -1,7 +1,9 @@
 package logger
 
 import (
+	"context"
 	"easyApp/config"
+	"fmt"
 	"github.com/Dqiucheng/dlogroller"
 	"github.com/gin-gonic/gin"
 	json "github.com/goccy/go-json"
@@ -98,14 +100,14 @@ func NewLogger(loggers **zap.Logger, module string) {
 
 	core := zapcore.NewTee(
 		zapcore.NewCore(
-			encoderConfig,                                                                            // 编码器配置
+			encoderConfig, // 编码器配置
 			zapcore.NewMultiWriteSyncer(append(sync, zapcore.AddSync(newDlogRoller(module, "")))...), // 输入方式
-			infoLevel,                                                                                // 日志级别
+			infoLevel, // 日志级别
 		),
 		zapcore.NewCore(
-			encoderConfig,                                                                                // 编码器配置
+			encoderConfig, // 编码器配置
 			zapcore.NewMultiWriteSyncer(append(sync, zapcore.AddSync(newDlogRoller(module, "_err")))...), // 输入方式
-			errorLevel,                                                                                   // 日志级别
+			errorLevel, // 日志级别
 		),
 	)
 
@@ -200,4 +202,13 @@ func SysLog(logData interface{}) *zap.Logger {
 // SysLogContext 		记录包含请求ID的日志
 func SysLogContext(ctx *gin.Context, logData interface{}) *zap.Logger {
 	return packField(logger, logData).With(zap.Int64("reqId", ctx.GetInt64("ReqId")))
+}
+
+// ErrPush 自定义错误信息通知》》》
+func ErrPush(ctx context.Context, errMsg error) {
+	if config.AppMode() != "debug" {
+		fmt.Println(ctx, errMsg)
+	}
+
+	return
 }

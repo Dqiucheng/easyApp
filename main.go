@@ -1,12 +1,12 @@
 package main
 
 import (
+	"context"
 	"easyApp/config"
 	"easyApp/db"
 	"easyApp/logger"
 	"easyApp/router"
 	"easyApp/util"
-	"context"
 	"errors"
 	"github.com/DeanThompson/ginpprof"
 	"github.com/Dqiucheng/httpClient"
@@ -122,4 +122,5 @@ func httpServerRun(router *gin.Engine) {
 func createDB() {
 	db.ConnectMySQLS()
 	db.ConnectRedisS()
+	db.ConnectElasticsearch()
 }

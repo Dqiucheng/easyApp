@@ -223,7 +223,6 @@ func (c *Context) ErrPush(errMsg error) *Context {
 
 // errPush 自定义错误信息通知》》》
 func (c *Context) errPush(errMsg error) {
-	if config.AppMode() != "debug" {
-		fmt.Println(errMsg)
-	}
+	logger.ErrPush(c, errMsg)
+	return
 }

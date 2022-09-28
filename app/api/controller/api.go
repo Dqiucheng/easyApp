@@ -1,8 +1,9 @@
 package controller
 
 import (
-	"easyApp/config"
 	"easyApp/core"
+	"easyApp/db"
+	"fmt"
 )
 
 type Api struct {
@@ -15,13 +16,8 @@ type Ass struct {
 }
 
 func (Api) Test(ctx *core.Context) {
-	var aaa Ass
-	_, err := ctx.AuthBodyBindJSON(&aaa, true)
-	if err != nil {
-		ctx.Json(1, err, aaa)
-		return
-	}
+	fmt.Println(db.Es().DeleteIndex("ss").Do(ctx.Context))
 
-	ctx.Json(0, "ok", config.CallHost)
+	ctx.Json(0, "ok", nil)
 	return
 }

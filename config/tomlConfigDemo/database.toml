@@ -5,13 +5,16 @@ Host            = "127.0.0.1"       # 主机
 Port            = "3306"            # 端口
 Username        = "root"            # 用户名
 Password        = "root"            # 密码
-Database        = "dlog"            # 数据库名称
-Prefix          = "dlog_"           # 数据库表前缀
+Database        = "ds"              # 数据库名称
+Prefix          = "ds_"             # 数据库表前缀
 Charset         = "utf8"            # 数据库编码
 MaxIdleConns    = 50                # 最大空闲连接数
 MaxOpenConns    = 40000             # 最大打开的连接数
 
-
+[release.elasticsearch.default]
+Addresses       = ["http://127.0.0.1:9200"]   # 主机
+Username        = ""               # 密码
+Password        = ""               # 密码
 
 #==============测试环境==============#
 [test]
@@ -20,8 +23,8 @@ Host            = "127.0.0.1"       # 主机，为空时不进行初始化
 Port            = "3306"            # 端口
 Username        = "root"            # 用户名
 Password        = "root"            # 密码
-Database        = "dlog"            # 数据库名称
-Prefix          = "dlog_"           # 数据库表前缀
+Database        = "ds"              # 数据库名称
+Prefix          = "ds_"             # 数据库表前缀
 Charset         = "utf8"            # 数据库编码
 MaxIdleConns    = 50                # 最大空闲连接数
 MaxOpenConns    = 40000             # 最大打开的连接数
@@ -34,6 +37,11 @@ DB              = 0               # 数据库
 MinIdleConns    = 10              # 最小空闲连接数，在启动阶段创建指定数量的Idle连接
 MaxIdleConns    = 50              # 最大空闲链接数
 
+[test.elasticsearch.default]
+Addresses       = ["http://127.0.0.1:9200"]   # 主机
+Username        = ""               # 密码
+Password        = ""               # 密码
+
 
 
 #==============调试环境==============#
@@ -43,8 +51,8 @@ Host            = "127.0.0.1"       # 主机，为空时不进行初始化
 Port            = "3306"            # 端口
 Username        = "root"            # 用户名
 Password        = "root"            # 密码
-Database        = "dlog"            # 数据库名称
-Prefix          = "dlog_"           # 数据库表前缀
+Database        = "ds"              # 数据库名称
+Prefix          = "ds_"             # 数据库表前缀
 Charset         = "utf8"            # 数据库编码
 MaxIdleConns    = 50                # 最大空闲连接数
 MaxOpenConns    = 40000             # 最大打开的连接数
@@ -56,3 +64,8 @@ Password        = ""              # 密码
 DB              = 0               # 数据库
 MinIdleConns    = 10              # 最小空闲连接数，在启动阶段创建指定数量的Idle连接
 MaxIdleConns    = 50              # 最大空闲链接数
+
+[debug.elasticsearch.default]
+Addresses       = ["http://127.0.0.1:9200"]   # 主机
+Username        = ""               # 密码
+Password        = ""               # 密码
