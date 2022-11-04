@@ -10,7 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/goccy/go-json"
-	"github.com/mitchellh/mapstructure"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -40,7 +39,7 @@ func (c *Context) authBindJSON(paramJson []byte, obj interface{}, authType bool)
 	// 记录入参
 	logger.LogContext(c.Context, dataMap).Info("入参")
 
-	if err = mapstructure.Decode(dataMap, obj); err != nil {
+	if err = json.Unmarshal(paramJson, obj); err != nil {
 		logger.LogContext(c.Context, err).Warn("参数解析失败")
 		if config.AppMode() != "release" {
 			return 0, fmt.Errorf("参数解析失败，err：%v", err)
