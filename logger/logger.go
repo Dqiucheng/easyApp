@@ -1,9 +1,7 @@
 package logger
 
 import (
-	"context"
 	"easyApp/config"
-	"fmt"
 	"github.com/Dqiucheng/dlogroller"
 	"github.com/gin-gonic/gin"
 	json "github.com/goccy/go-json"
@@ -181,6 +179,10 @@ func Log(logData interface{}) *zap.Logger {
 
 // LogContext 		记录包含请求ID的日志
 func LogContext(ctx *gin.Context, logData interface{}) *zap.Logger {
+	if ctx == nil {
+		return packField(logger, logData)
+	}
+
 	return packField(logger, logData).With(
 		zap.Int64("reqId", ctx.GetInt64("ReqId")),
 		zap.String("reqURI", ctx.Request.RequestURI),
@@ -205,10 +207,21 @@ func SysLogContext(ctx *gin.Context, logData interface{}) *zap.Logger {
 }
 
 // ErrPush 自定义错误信息通知》》》
-func ErrPush(ctx context.Context, errMsg error) {
-	if config.AppMode() != "debug" {
-		fmt.Println(ctx, errMsg)
-	}
+func ErrPush(ctx *gin.Context, errMsg error) {
+	go func() {
+		LogContext(ctx, errMsg).Error("异常事件")
+		defer func() {
+			if err := recover(); err != nil { // todo 记日志
+				LogContext(ctx, errMsg).DPanic("严重的异常捕获")
+			}
+		}()
+
+		//if config.AppMode() != "debug" {
+		//	fmt.Println(ctx, errMsg)
+		//}
+
+		// 开始处理
+	}()
 
 	return
 }

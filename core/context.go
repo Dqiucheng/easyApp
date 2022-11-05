@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/goccy/go-json"
+	"go.uber.org/zap"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -89,7 +90,7 @@ func (c *Context) authBindJSON(paramJson []byte, obj interface{}, authType bool)
 //
 // obj 			结构体。
 // authType 	签名验证类型，0不做验证，1Sign
-func (c *Context) AuthBodyBindJSON(obj interface{}, isAuthSign bool) (int64, error) {
+func (c *Context) AuthBodyBindJSON(obj interface{}, isAuthSign bool) (ucUid int64, err error) {
 	body, _ := ioutil.ReadAll(c.Request.Body)
 	if len(body) == 0 {
 		return 0, errors.New("未获取到body数据")
@@ -200,28 +201,17 @@ func (c *Context) JsonAesEcb(errCode int, errMsg interface{}, data interface{}, 
 	return c
 }
 
+// Log 记录上下文日志信息
+func (c *Context) Log(logData interface{}) *zap.Logger {
+	return logger.LogContext(c.Context, logData)
+}
+
 // ErrPush 记录并推送重要的更加详细的错误信息
 // 可自定义推送至提醒平台，比如：钉钉、企业微信、邮箱
 // 之所以在单独传递一次错误信息是因为可能返回给前端的数据与实际要记录的数据不一致
 //
 // errMsg 详细错误信息
 func (c *Context) ErrPush(errMsg error) *Context {
-	go func() {
-		logger.LogContext(c.Context, errMsg).Error("异常事件")
-		defer func() {
-			if err := recover(); err != nil { // todo 记日志
-				logger.LogContext(c.Context, errMsg).DPanic("严重的异常捕获")
-			}
-		}()
-
-		// 自定义错误信息通知》》》
-		c.errPush(errMsg)
-	}()
+	logger.ErrPush(c.Context, errMsg)
 	return c
-}
-
-// errPush 自定义错误信息通知》》》
-func (c *Context) errPush(errMsg error) {
-	logger.ErrPush(c, errMsg)
-	return
 }
