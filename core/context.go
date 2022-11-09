@@ -16,10 +16,25 @@ import (
 	"net/url"
 	"reflect"
 	"strconv"
+	"strings"
 )
 
 type Context struct {
 	*gin.Context
+}
+
+var validate *validator.Validate
+
+func init() {
+	validate = validator.New()
+	validate.RegisterTagNameFunc(func(fld reflect.StructField) string {
+		name := strings.SplitN(fld.Tag.Get("json"), ",", 2)[0]
+		// skip if tag key says it should be ignored
+		if name == "-" {
+			return ""
+		}
+		return name
+	})
 }
 
 // authBindJSON json参数绑定至结构体
@@ -54,7 +69,7 @@ func (c *Context) authBindJSON(paramJson []byte, obj interface{}, authType bool)
 		}
 	}
 
-	if err = validator.New().Struct(obj); err != nil {
+	if err = validate.Struct(obj); err != nil {
 		logger.LogContext(c.Context, err).Warn("参数错误")
 		if config.AppMode() != "release" {
 			return 0, fmt.Errorf("参数错误，err：%v", err)
