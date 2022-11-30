@@ -25,7 +25,7 @@ go run main.go
 
 # 3、安装air平滑重启包（生产环境不建议使用）
 ~~~
-go get github.com/cosmtrek/air
+go install github.com/cosmtrek/air@latest
 ~~~
 > 进入项目目录
 
