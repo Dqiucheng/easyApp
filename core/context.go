@@ -85,10 +85,10 @@ func (c *Context) authBindJSON(paramJson []byte, obj interface{}, authType bool)
 
 		switch JWTtoken["ucuid"].(type) {
 		case float64:
-			ucUid = int64(dataMap["ucuid"].(float64))
+			ucUid = int64(JWTtoken["ucuid"].(float64))
 			break
 		case string:
-			ucUid, _ = strconv.ParseInt(dataMap["ucuid"].(string), 10, 64)
+			ucUid, _ = strconv.ParseInt(JWTtoken["ucuid"].(string), 10, 64)
 			break
 		}
 		if structField.Tag.Get("validate") == "required" && (ucUid == 0 || JWTerr != nil) {
