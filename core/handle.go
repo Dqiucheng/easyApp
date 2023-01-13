@@ -12,7 +12,7 @@ func Handle(h HandlerFunc) gin.HandlerFunc {
 		if _, ok := c.Get("ReqId"); !ok {
 			t := time.Now()
 			c.Set("StartTime", t)
-			c.Set("ReqId", t.UnixNano())
+			c.Set("ReqId", t.UnixMicro())
 		}
 		h(&Context{c})
 	}
